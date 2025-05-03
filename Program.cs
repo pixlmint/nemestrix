@@ -1,9 +1,14 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Pixlmint.Nemestrix.Auth;
 using Pixlmint.Nemestrix.Data;
 using Pixlmint.Nemestrix.Helper;
 using Pixlmint.Nemestrix.Model;
+using Pixlmint.Util;
+
+if (ApiKeyGenerator.GenerateAndPrintKey(args))
+    return;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +27,8 @@ app.UseForwardedHeaders(
         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
     }
 );
+
+app.UseApiKeyAuthentication();
 
 using (var scope = app.Services.CreateScope())
 {

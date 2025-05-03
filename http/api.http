@@ -1,4 +1,5 @@
-@HOST = localhost:8082
+@HOST = localhost:5001
+@APIKEY = o5hJKzQuiRDxVrfGuOen5pJ8ICPUKojuwsQCmNBmAUw
 
 ###
 
@@ -45,7 +46,9 @@ GET {{HOST}}/t?node=Test.*
 ###
 
 GET {{HOST}}/t/Test.Node2.NestedChild2
+X-Api-Key: {{APIKEY}}
 
 ###
 
 DELETE {{HOST}}/t/Test.Another
+X-Api-Key: {{APIKEY}}

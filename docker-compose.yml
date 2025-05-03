@@ -22,6 +22,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DbConnection=Host=db;Database=db;Username=db;Password=db
+      - ASPNETCORE_ApiKey__Hash=qaSy4s5LpswUObh1ZsouUyGtJvIwkYKHV0CIbto7ahM=
 
 volumes:
   db:
