@@ -19,57 +19,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet(
-    "/trees",
-    async (ApplicationDb db) =>
-    {
-        return await db.Nodes.ToListAsync();
-    }
-);
-
-app.MapGet(
-    "/tree",
-    async (ApplicationDb db, string node) =>
-    {
-        var tNode = await db.Nodes.FirstOrDefaultAsync(n => n.Path.MatchesLQuery(node));
-
-        if (tNode == null)
-        {
-            return Results.NotFound();
-        }
-
-        return Results.Ok(new { Id = tNode.Id, Path = tNode.Path.ToString() });
-    }
-);
-
-app.MapGet(
-    "/trees/{id}",
-    async (int Id, ApplicationDb db) =>
-    {
-        var Tree = await db.Nodes.FirstOrDefaultAsync(t => t.Id == Id);
-        if (Tree == null)
-        {
-            return Results.NotFound();
-        }
-
-        return Results.Ok(new { Path = Tree.Path.ToString() });
-    }
-);
-
-app.MapPost(
-    "/trees",
-    async (TreeNodeDto treeDto, ApplicationDb db) =>
-    {
-        var tree = treeDto.ToTreeNode();
-        db.Nodes.Add(tree);
-        await db.SaveChangesAsync();
-
-        return Results.Ok(new { Id = tree.Id, Path = tree.Path.ToString() });
-    }
-);
-
 static void JsonToNodesRecursive(
     Newtonsoft.Json.Linq.JToken json,
     string? parent,
@@ -177,9 +126,12 @@ async Task<IResult> HandleEdit(ApplicationDb db, HttpRequest request, bool Allow
 
     await db.SaveChangesAsync();
 
-    if (AllowReplace) {
+    if (AllowReplace)
+    {
         return Results.Ok(ret);
-    } else {
+    }
+    else
+    {
         return Results.Created("/t", ret);
     }
 }
@@ -285,4 +237,3 @@ app.MapGet(
 );
 
 app.Run();
-
