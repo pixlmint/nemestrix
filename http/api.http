@@ -1,0 +1,19 @@
+@HOST = localhost:5001
+
+###
+
+GET {{HOST}}
+
+###
+
+GET {{HOST}}/trees
+
+###
+
+POST {{HOST}}/trees
+Content-Type: application/json
+
+{
+    "name": "hello-world"
+}
+

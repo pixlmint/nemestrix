@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=db
+      - POSTGRES_PASSWORD=db
+      - POSTGRES_DB=db
+    ports:
+      - 5432:5432
+    container_name: nemestrix_db
+
+volumes:
+  db:
