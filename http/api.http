@@ -10,10 +10,42 @@ GET {{HOST}}/trees
 
 ###
 
+GET {{HOST}}/trees/3
+
+###
+
+GET {{HOST}}/tree?node=Home
+
+###
+
 POST {{HOST}}/trees
 Content-Type: application/json
 
 {
-    "name": "hello-world"
+    "label": "Home.World"
 }
 
+###
+
+POST {{HOST}}/t
+Content-Type: application/json
+
+{
+    "Test": {
+        "Node2": {
+            "NestedChild2": "hello2"
+        }
+    }
+}
+
+###
+
+GET {{HOST}}/t?node=Test.*
+
+###
+
+GET {{HOST}}/t/Test.Multi.0
+
+###
+
+DELETE {{HOST}}/t/Test.Another
