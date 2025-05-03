@@ -20,8 +20,6 @@ namespace Pixlmint.Nemestrix.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "ltree");
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "ltree_plpython3u");
-            NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "plpython3u");
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Pixlmint.Nemestrix.Model.LeafNode", b =>

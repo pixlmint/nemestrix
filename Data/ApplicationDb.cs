@@ -15,8 +15,6 @@ public class ApplicationDb : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasPostgresExtension("plpython3u");
-        modelBuilder.HasPostgresExtension("ltree_plpython3u");
         modelBuilder.Entity<LeafNode>().ToTable("Leafs");
 
         modelBuilder

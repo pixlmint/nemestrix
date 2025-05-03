@@ -6,15 +6,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Pixlmint.Nemestrix.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:PostgresExtension:ltree", ",,")
-                .Annotation("Npgsql:PostgresExtension:plpython3u", ",,")
-                .Annotation("Npgsql:PostgresExtension:ltree_plpython3u", ",,");
+                .Annotation("Npgsql:PostgresExtension:ltree", ",,");
 
             migrationBuilder.CreateTable(
                 name: "Leafs",
