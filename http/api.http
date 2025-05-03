@@ -1,4 +1,4 @@
-@HOST = localhost:5001
+@HOST = localhost:8082
 
 ###
 
@@ -44,7 +44,7 @@ GET {{HOST}}/t?node=Test.*
 
 ###
 
-GET {{HOST}}/t/Test.Multi.0
+GET {{HOST}}/t/Test.Node2.NestedChild2
 
 ###
 

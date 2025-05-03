@@ -10,6 +10,18 @@ services:
     ports:
       - 5432:5432
     container_name: nemestrix_db
+  prod:
+    image: pixlmint/nemestrix
+    container_name: nemestrix_prod
+    build:
+      dockerfile: docker/Dockerfile
+      context: .
+    ports:
+      - 8082:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DbConnection=Host=db;Database=db;Username=db;Password=db
 
 volumes:
   db:
