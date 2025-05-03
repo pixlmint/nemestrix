@@ -14,9 +14,9 @@ public class ApiKeyGenerator
 
         // Generate a random API key if not provided
         string apiKey;
-        if (args.Length > 0)
+        if (args.Length > 1)
         {
-            apiKey = args[0];
+            apiKey = args[1];
             Console.WriteLine($"Using provided API key: {apiKey}");
         }
         else

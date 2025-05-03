@@ -1,9 +1,10 @@
-@HOST = localhost:5001
+@HOST = https://nemestrix.pixlmint.ch
 @APIKEY = o5hJKzQuiRDxVrfGuOen5pJ8ICPUKojuwsQCmNBmAUw
 
 ###
 
 GET {{HOST}}
+X-Api-Key: {{APIKEY}}
 
 ###
 
