@@ -2,6 +2,9 @@ namespace Pixlmint.Nemestrix.Helper;
 
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using Pixlmint.Nemestrix.Model;
 
 public static class DictionaryConverter
 {
@@ -162,6 +165,65 @@ public static class DictionaryConverter
                     }
                 }
             }
+        }
+    }
+}
+
+public static class JsonConverter
+{
+    public static List<LeafNode> JsonToNodes(dynamic json)
+    {
+        var nodes = new List<LeafNode>();
+
+        JsonToNodesRecursive(json, null, nodes);
+
+        return nodes;
+    }
+
+    private static void JsonToNodesRecursive(
+        Newtonsoft.Json.Linq.JToken json,
+        string? parent,
+        List<LeafNode> nodes,
+        int depth = 0
+    )
+    {
+        if (
+            json is Newtonsoft.Json.Linq.JObject
+            || (json is Newtonsoft.Json.Linq.JProperty && json.HasValues)
+        )
+        {
+            foreach (var child in json.Children())
+            {
+                JsonToNodesRecursive(child, parent, nodes, depth++);
+            }
+        }
+        else if (json is Newtonsoft.Json.Linq.JArray)
+        {
+            var arr = ((Newtonsoft.Json.Linq.JArray)json);
+            foreach (var child in arr)
+            {
+                JsonToNodesRecursive(child, parent, nodes, depth++);
+            }
+        }
+        else if (json is Newtonsoft.Json.Linq.JValue)
+        {
+            var path = json.Path.Replace('[', '.').Replace("]", "");
+            LeafNode leaf;
+            TreeNode node = new TreeNode { Path = new LTree(path) };
+            switch (json.Type)
+            {
+                case JTokenType.Float:
+                    leaf = new NumericLeafNode { Node = node, Value = json.Value<float>() };
+                    break;
+                case JTokenType.Integer:
+                    leaf = new NumericLeafNode { Node = node, Value = json.Value<int>() };
+                    break;
+                default:
+                    leaf = new StringLeafNode { Node = node, Value = json.Value<string>() };
+                    break;
+            }
+
+            nodes.Add(leaf);
         }
     }
 }

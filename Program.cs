@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Pixlmint.Nemestrix.Data;
 using Pixlmint.Nemestrix.Helper;
 using Pixlmint.Nemestrix.Model;
@@ -14,7 +13,6 @@ builder.Services.AddDbContext<ApplicationDb>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"))
 );
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 
 var app = builder.Build();
 
@@ -31,68 +29,12 @@ using (var scope = app.Services.CreateScope())
     db.Database.Migrate();
 }
 
-static void JsonToNodesRecursive(
-    Newtonsoft.Json.Linq.JToken json,
-    string? parent,
-    List<LeafNode> nodes,
-    int depth = 0
-)
-{
-    if (
-        json is Newtonsoft.Json.Linq.JObject
-        || (json is Newtonsoft.Json.Linq.JProperty && json.HasValues)
-    )
-    {
-        foreach (var child in json.Children())
-        {
-            JsonToNodesRecursive(child, parent, nodes, depth++);
-        }
-    }
-    else if (json is Newtonsoft.Json.Linq.JArray)
-    {
-        var arr = ((Newtonsoft.Json.Linq.JArray)json);
-        foreach (var child in arr)
-        {
-            JsonToNodesRecursive(child, parent, nodes, depth++);
-        }
-    }
-    else if (json is Newtonsoft.Json.Linq.JValue)
-    {
-        var path = json.Path.Replace('[', '.').Replace("]", "");
-        LeafNode leaf;
-        TreeNode node = new TreeNode { Path = new LTree(path) };
-        switch (json.Type)
-        {
-            case JTokenType.Float:
-                leaf = new NumericLeafNode { Node = node, Value = json.Value<float>() };
-                break;
-            case JTokenType.Integer:
-                leaf = new NumericLeafNode { Node = node, Value = json.Value<int>() };
-                break;
-            default:
-                leaf = new StringLeafNode { Node = node, Value = json.Value<string>() };
-                break;
-        }
-
-        nodes.Add(leaf);
-    }
-}
-
-static List<LeafNode> JsonToNodes(dynamic json)
-{
-    var nodes = new List<LeafNode>();
-
-    JsonToNodesRecursive(json, null, nodes);
-
-    return nodes;
-}
-
 async Task<IResult> HandleEdit(ApplicationDb db, HttpRequest request, bool AllowReplace)
 {
     using var reader = new StreamReader(request.Body);
-    dynamic dynJson = JsonConvert.DeserializeObject(await reader.ReadToEndAsync())!;
+    object dynJson = JsonConvert.DeserializeObject(await reader.ReadToEndAsync())!;
 
-    var nodes = JsonToNodes(dynJson);
+    var nodes = Pixlmint.Nemestrix.Helper.JsonConverter.JsonToNodes(dynJson);
 
     var ret = new Dictionary<string, object>();
 
