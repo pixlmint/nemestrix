@@ -15,11 +15,15 @@ app.MapGet("/", () => "Hello World!");
 
 app.MapGet("/trees", async (ApplicationDb db) => await db.Trees.ToListAsync());
 
-app.MapPost("/trees", async (Tree tree, ApplicationDb db) => {
+app.MapPost(
+    "/trees",
+    async (Tree tree, ApplicationDb db) =>
+    {
         db.Trees.Add(tree);
         await db.SaveChangesAsync();
 
         return Results.Ok(tree);
-        });
+    }
+);
 
 app.Run();
