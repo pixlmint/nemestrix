@@ -46,7 +46,6 @@ public class ApiKeyAuthenticationMiddleware
     private bool IsValidApiKey(string apiKey)
     {
         var hashedApiKeyFromEnv = _configuration["ApiKey:Hash"];
-        Console.WriteLine(hashedApiKeyFromEnv);
         if (string.IsNullOrEmpty(hashedApiKeyFromEnv))
         {
             throw new InvalidOperationException("API_KEY_HASH environment variable is not set");
